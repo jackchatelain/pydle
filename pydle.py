@@ -1,14 +1,17 @@
 import random
 from termcolor import colored
-import sys
 from time import sleep
 with open("wordle-list.txt") as file:
     words = file.read().split("\n")
 playing = True
 while playing:
-    answer = random.choice(words)
+    #answer = random.choice(words)
+    wordNum = random.randint(0, 12946)
+    answer = words[wordNum]
     guessNum = 0
     fullOutput = []
+    additionalOutput = ""
+    emojis = ""
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n---start---\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
     def coolPrint(thing):
@@ -37,25 +40,35 @@ while playing:
             for i in range(5):
                 if guess[i] == answer[i]:
                     output += colored(guess[i], "green")
+                    emojis += "🟩"
                 elif guess[i] in answer:
                     output += colored(guess[i], "yellow")
+                    emojis += "🟨"
                 else:
                     output += guess[i]
+                    emojis += "⬛️"
                 # update(output)
             coolerPrint(output)
+            emojis += "\n"
             if str(guess).strip() == str(answer).strip():
                 print("Congrats! You got the word in " +
                       str(guessNum + 1) + " guesses!")
                 break
         else:
             if len(guess) == 5:
-                print("Not a valid word.")
+                coolerPrint("Not a valid word.")
             else:
                 print("It's supposed to be five letters, not " +
                       str(len(guess)) + "!")
-                playing = False
-                break
-    print("The word was " + answer + "!")
+                #playing = False
+                # break
+    if not str(guess).strip() == str(answer).strip():
+        print("The word was " + answer + "!")
+        sleep(0.5)
+    print("Your result: \n")
+    print("pydle (Word #" + str(wordNum) + ")")
+    print(emojis)
+    print("\n")
     ask = input("Do you want to play again? ")
     if "ye" in ask:
         playing = True
