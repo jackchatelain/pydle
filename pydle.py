@@ -1,5 +1,5 @@
 import random
-from termcolor import colored
+from _vendor.termcolor import colored
 from time import sleep
 with open("wordle-list.txt") as file:
     words = file.read().split("\n")
