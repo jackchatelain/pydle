@@ -222,11 +222,10 @@ while playing:
         sleep(0.5)
     print("Your result: \n")
     print("pydle " + str(wordNum) + " " +
-          str(guessNum + 1) + "/" + letterAmount)
+          str(guessNum + 1) + "/" + str(letterAmount))
     print(emojis)
-    print("\n")
-    ask = input("Press enter to play again, type anything to quit. ")
-    if "" == ask:
+    ask = input("\nPress enter to play again, type anything to quit. ")
+    if ask == "":
         playing = False
     else:
         playing = True
