@@ -219,8 +219,8 @@ while playing:
                     emojis += "🟥"
                 emojis += "\n"
             else:
-                print("Please enter a  " + str(letterAmount) + " letter word, not a " +
-                      str(len(guess)) + "letter word.")
+                print("Please enter a " + str(letterAmount) + " letter word, not a " +
+                      str(len(guess)) + " letter word.")
                 for guessCharacter in guess:
                     emojis += "🟥"
                 emojis += "\n"
