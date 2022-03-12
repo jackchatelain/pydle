@@ -1,9 +1,6 @@
 import random
 from _vendor.termcolor import colored
 from time import sleep
-with open("wordle-list.txt") as file:
-    words = file.read().split("\n")
-
 playing = True
 pydleText1 = colored("Welcome to ", "green")
 pydleText2 = colored("pydle", "magenta")
@@ -11,7 +8,7 @@ pydleText3 = colored("!", "green")
 print("\n---------------------\n" + pydleText1 + pydleText2 + pydleText3 +
       "\n\nWordle, but in the terminal!\n---------------------\n\n")
 sleep(1)
-print('What color scheme would you like to use?\nLeave blank to use the default, and enter "custom" to choose any colors.')
+print('What color scheme would you like to use?\nLeave blank to use the default, enter "custom" to choose any colors, or enter "colorblind" for a red and blue theme.')
 colorScheme = input("Color scheme: ")
 if colorScheme == "":
     colorScheme = "wordle"
@@ -48,6 +45,10 @@ elif colorScheme == "yellow":
     colorCorrect = "red"
     colorInWord = "white"
     colorNone = "yellow"
+elif colorScheme == "colorblind":
+    colorCorrect = "blue"
+    colorInWord = "red"
+    colorNone = ""
 elif colorScheme == "hardMode":
     colorCorrect = "red"
     colorInWord = "red"
@@ -59,43 +60,60 @@ elif colorScheme == "custom":
         "Color when the letter is in the word but in the wrong spot: ")
     colorNone = input(
         "Color when the letter is not in the word: ")
+if colorScheme != "":
+    if colorNone == "":
+        colorNone = "white"
+    print("Correct color - " + colored(colorCorrect, colorCorrect) + "\nIn word color - " +
+          colored(colorInWord, colorInWord) + "\nIncorrect color - " + colored(colorNone, colorNone))
 print("\nHow many letters do you want to play with? 5 is recommended.\n")
 letterAmount = input("Number of letters: ")
 letterAmount = int(letterAmount)
+if letterAmount == 1:
+    guessAmount = 15
 if letterAmount == 2:
-    guessAmount = 2
+    guessAmount = 8
 elif letterAmount == 3:
-    guessAmount = 3
+    guessAmount = 6
 elif letterAmount == 4:
-    guessAmount = 4
+    guessAmount = 5
 elif letterAmount == 5:
     guessAmount = 6
 elif letterAmount == 6:
-    guessAmount = 8
+    guessAmount = 11
 elif letterAmount == 7:
     guessAmount = 15
 elif letterAmount == 8:
     guessAmount = 26
-else:
-    print("\n\n\n\n\n\nThe number of letters should be from 2-8, but the game will still work with any positive integer.\n")
+elif letterAmount <= 25:
     guessAmount = 99
-    # sleep(1)
-if letterAmount != 5:
+else:
+    print("\n\n\n\n\n\n\n")
+    guessAmount = 99
     warningText = colored("WARNING!", "red")
-    print("\n!!!\n" + warningText + "\nThe answer list only applies to 5 letter words, so with any other number you can guess any word. Please be honorable and only guess valid english words.\n!!!\n")
+    print("\n!!!\n" + warningText +
+          "\npydle only works with word length in range 1-25.\n!!!\n")
+    sleep(5)
     # sleep(3)
 print("\nBased on the amount of letters, you will get " +
       str(guessAmount) + " guesses.\n")
-sleep(3)
 useless = input("Press enter to start.")
 
 if outline:
     colorCorrect = "on_" + str(colorCorrect)
     colorInWord = "on_" + str(colorInWord)
 
+
+if letterAmount == 5:
+    with open("wordle-list.txt") as file:
+        words = file.read().split("\n")
+else:
+    filename = str(letterAmount) + "-list.txt"
+    with open(filename) as file:
+        words = file.read().split("\n")
+
 while playing:
     # answer = random.choice(words)
-    wordNum = random.randint(0, 12946)
+    wordNum = random.randint(0, len(words) - 1)
     answer = words[wordNum]
     guessNum = 0
     fullOutput = []
@@ -130,22 +148,7 @@ while playing:
         outList = []
         output = ""
         # latest = ""
-        if letterAmount == 5:
-            answerListLocation = "words"
-        else:
-            answerListLocation = None
-        if answerListLocation == "words":
-            if len(guess) == letterAmount and guess in words:
-                validWord = True
-            else:
-                validWord = False
-        elif answerListLocation == None:
-            if len(guess) == letterAmount:
-                validWord = True
-            else:
-                validWord = False
-
-        if validWord:
+        if len(guess) == letterAmount and guess in words:
             for i in range(letterAmount):
                 if guess[i] == answer[i]:
                     #output += colored(guess[i], "green")
@@ -212,20 +215,26 @@ while playing:
         else:
             if len(guess) == letterAmount:
                 coolerPrint("Not a valid word.")
+                for guessCharacter in guess:
+                    emojis += "🟥"
+                emojis += "\n"
             else:
-                print("It's supposed to be " + letterAmount + " letters, not " +
-                      str(len(guess)) + ".")
+                print("Please enter a  " + str(letterAmount) + " letter word, not a " +
+                      str(len(guess)) + "letter word.")
+                for guessCharacter in guess:
+                    emojis += "🟥"
+                emojis += "\n"
                 # playing = False
                 # break
     if not str(guess).strip() == str(answer).strip():
         print("The word was " + answer + "!")
         sleep(0.5)
     print("Your result: \n")
-    print("pydle " + str(wordNum) + " " +
-          str(guessNum + 1) + "/" + str(letterAmount))
+    print("pydle " + str(wordNum + 1) + " " +
+          str(guessNum + 1) + "/" + str(guessAmount))
     print(emojis)
     ask = input("\nPress enter to play again, type anything to quit. ")
-    if ask == "":
-        playing = False
-    else:
+    if "" == ask:
         playing = True
+    else:
+        playing = False
