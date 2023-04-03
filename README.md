@@ -1,5 +1,7 @@
 # pydle
 
+Moved to [https://gitlab.com/jackchatelain1/pydle](https://gitlab.com/jackchatelain1/pydle)
+
 ## Dependencies
 
 Install python dependencies using the following pip command:
