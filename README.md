@@ -3,11 +3,14 @@
 Wordle, but in the terminal. Written in python.
 
 ## Features
+
 - Play unlimited times per day
 - Play offline
 - Play with words of any length from 1-25
 - Customize the text colors
 - Share your result with colored emoji
+
+Notice: You must `cd` inside the pydle folder before running it or it won't be able to get the answer list
 
 ## Dependencies
 
