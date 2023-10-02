@@ -14,12 +14,11 @@ if useless != "":
     colorScheme = input("Color scheme: ")
     if colorScheme == "":
         colorScheme = "wordle"
-    outline = False  # Does not work when set to true
     if colorScheme == "pydle":
         colorCorrect = "green"
         colorInWord = "magenta"
         colorNone = ""
-    elif colorScheme == "wordle" or colorScheme == "":
+    elif colorScheme in ["wordle", ""]:
         colorCorrect = "green"
         colorInWord = "yellow"
         colorNone = ""
@@ -65,8 +64,17 @@ if useless != "":
     if colorScheme != "":
         if colorNone == "":
             colorNone = "white"
-        print("Correct color - " + colored(colorCorrect, colorCorrect) + "\nIn word color - " +
-              colored(colorInWord, colorInWord) + "\nIncorrect color - " + colored(colorNone, colorNone))
+        print(
+            (
+                (
+                    f"Correct color - {colored(colorCorrect, colorCorrect)}"
+                    + "\nIn word color - "
+                    + colored(colorInWord, colorInWord)
+                )
+                + "\nIncorrect color - "
+            )
+            + colored(colorNone, colorNone)
+        )
     print("\nHow many letters do you want to play with? 5 is recommended.\n")
     letterAmount = input("Number of letters: ")
     if letterAmount == "":
@@ -100,8 +108,6 @@ if useless != "":
         # sleep(3)
     print("\nBased on the amount of letters, you will get " +
           str(guessAmount) + " guesses.\n")
-    #extraInfo = input("(Yes or no) Would you like to display extra info? ")
-    extraInfo = False  # Has some problems
     # if "ye" in extraInfo or "True" in extraInfo:
     #    extraInfo = True
     # else:
@@ -120,23 +126,24 @@ else:
     colorScheme = "wordle"
     guessAmount = 6
     letterAmount = 5
-    outline = False
-    extraInfo = False
     delay = "auto"
+#extraInfo = input("(Yes or no) Would you like to display extra info? ")
+extraInfo = False  # Has some problems
+outline = False  # Does not work when set to true
 keyboard = "qwertyuiopasdfghjklzxcvbnm"
 startKeyboard = "qwertyuiopasdfghjklzxcvbnm"
 knownLetters = ""
 
 if outline:
-    colorCorrect = "on_" + str(colorCorrect)
-    colorInWord = "on_" + str(colorInWord)
+    colorCorrect = f"on_{str(colorCorrect)}"
+    colorInWord = f"on_{str(colorInWord)}"
 
 
 if letterAmount == 5:
     with open("wordle-list.txt") as file:
         words = file.read().split("\n")
 else:
-    filename = str(letterAmount) + "-list.txt"
+    filename = f"{letterAmount}-list.txt"
     with open(filename) as file:
         words = file.read().split("\n")
 
