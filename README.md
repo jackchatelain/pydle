@@ -10,11 +10,10 @@ Wordle, but in the terminal. Written in python.
 - Customize the text colors
 - Share your result with colored emoji
 
-Notice: You must `cd` inside the pydle folder before running it or it won't be able to get the answer list
-
 ## How to use
 
-Just run `pydle.py`!
+`cd` inside the `pydle` folder
+Run `pydle.py`
 
 ## Dependencies
 
