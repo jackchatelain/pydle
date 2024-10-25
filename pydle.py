@@ -1,6 +1,7 @@
 import random
 from _vendor.termcolor import colored
 from time import sleep
+from os import system
 playing = True
 pydleText1 = colored("Welcome to ", "green")
 pydleText2 = colored("pydle", "magenta")
@@ -15,59 +16,71 @@ if useless != "":
     if colorScheme == "":
         colorScheme = "wordle"
     outline = False  # Does not work when set to true
-    if colorScheme == "pydle":
-        colorCorrect = "green"
-        colorInWord = "magenta"
-        colorNone = ""
-    elif colorScheme == "wordle" or colorScheme == "":
-        colorCorrect = "green"
-        colorInWord = "yellow"
-        colorNone = ""
-    elif colorScheme == "alt":
-        colorCorrect = "cyan"
-        colorInWord = "blue"
-        colorNone = "white"
-    elif colorScheme == "warm":
-        colorCorrect = "yellow"
-        colorInWord = "magenta"
-        colorNone = "red"
-    elif colorScheme == "cold":
-        colorCorrect = "blue"
-        colorInWord = "cyan"
-        colorNone = "magenta"
-    elif colorScheme == "simple":
-        colorCorrect = "white"
-        colorInWord = "cyan"
-        colorNone = ""
-    elif colorScheme == "neon":
-        colorCorrect = "magenta"
-        colorInWord = "green"
-        colorNone = "cyan"
-    elif colorScheme == "yellow":
-        colorCorrect = "red"
-        colorInWord = "white"
-        colorNone = "yellow"
-    elif colorScheme == "colorblind":
-        colorCorrect = "blue"
-        colorInWord = "red"
-        colorNone = ""
-    elif colorScheme == "hardMode":
-        colorCorrect = "red"
-        colorInWord = "red"
-        colorNone = ""
-    elif colorScheme == "custom":
-        print("Valid colors: grey, red, green, yellow, blue, magenta, cyan, and white.\nYou will get an error if you do not enter any of these colors exactly.\n")
-        colorCorrect = input("Color when the letter is in the correct spot: ")
-        colorInWord = input(
-            "Color when the letter is in the word but in the wrong spot: ")
-        colorNone = input(
-            "Color when the letter is not in the word: ")
+
+    match colorScheme:
+        case "pydle":
+            colorCorrect = "green"
+            colorInWord = "magenta"
+            colorNone = ""
+        case "wordle" | "":
+            colorCorrect = "green"
+            colorInWord = "yellow"
+            colorNone = ""
+        case "alt":
+            colorCorrect = "cyan"
+            colorInWord = "blue"
+            colorNone = "white"
+        case "warm":
+            colorCorrect = "yellow"
+            colorInWord = "magenta"
+            colorNone = "red"
+        case "cold":
+            colorCorrect = "blue"
+            colorInWord = "cyan"
+            colorNone = "magenta"
+        case "simple":
+            colorCorrect = "white"
+            colorInWord = "cyan"
+            colorNone = ""
+        case "neon":
+            colorCorrect = "magenta"
+            colorInWord = "green"
+            colorNone = "cyan"
+        case "yellow":
+            colorCorrect = "red"
+            colorInWord = "white"
+            colorNone = "yellow"
+        case "colorblind":
+            colorCorrect = "blue"
+            colorInWord = "red"
+            colorNone = ""
+        case "colorblind2":
+            colorCorrect = "yellow"
+            colorInWord = "magenta"
+            colorNone = ""
+        case "hardMode":
+            colorCorrect = "red"
+            colorInWord = "red"
+            colorNone = ""
+        case "custom":
+            print("Valid colors: grey, red, green, yellow, blue, magenta, cyan, and white.\nYou will get an error if you do not enter any of these colors exactly.\n")
+            colorCorrect = input("Color when the letter is in the correct spot: ")
+            colorInWord = input(
+                "Color when the letter is in the word but in the wrong spot: ")
+            colorNone = input(
+                "Color when the letter is not in the word: ")
+        case _:
+            print("\n\n\n\n\n\n\n")
+            warningText = colored("ERROR", "red")
+            print("\n!!!\n" + warningText +
+                "\nInvalid color scheme.\n!!!\n")
+            quit()
     if colorScheme != "":
         if colorNone == "":
             colorNone = "white"
         print("Correct color - " + colored(colorCorrect, colorCorrect) + "\nIn word color - " +
               colored(colorInWord, colorInWord) + "\nIncorrect color - " + colored(colorNone, colorNone))
-    print("\nHow many letters do you want to play with? 5 is recommended.\n")
+    print("\nHow many letters do you want to play with? 5 is the default.\n")
     letterAmount = input("Number of letters: ")
     if letterAmount == "":
         letterAmount = 5
@@ -92,12 +105,10 @@ if useless != "":
         guessAmount = 99
     else:
         print("\n\n\n\n\n\n\n")
-        guessAmount = 99
-        warningText = colored("WARNING!", "red")
+        warningText = colored("ERROR", "red")
         print("\n!!!\n" + warningText +
               "\npydle only works with word length in range 1-25.\n!!!\n")
-        sleep(5)
-        # sleep(3)
+        quit()
     print("\nBased on the amount of letters, you will get " +
           str(guessAmount) + " guesses.\n")
     #extraInfo = input("(Yes or no) Would you like to display extra info? ")
@@ -133,12 +144,34 @@ if outline:
 
 
 if letterAmount == 5:
-    with open("wordle-list.txt") as file:
+    with open("word_lists/wordle-list.txt") as file:
         words = file.read().split("\n")
 else:
     filename = str(letterAmount) + "-list.txt"
-    with open(filename) as file:
+    with open(f"word_lists/{filename}") as file:
         words = file.read().split("\n")
+
+def insertSpace():
+    #print("\n" * 150)
+    system("clear")
+
+def coolPrint(thing):
+    for i in thing:
+        print(i, end="")
+        sleep(0.2)
+    print("")
+
+def coolerPrint(out):
+    insertSpace()
+    fullOutput.append(out)
+    for item in fullOutput:
+        print(item)
+
+def update(out):
+    for item in fullOutput:
+        insertSpace()
+        print(item)
+        sleep(0.2)
 
 while playing:
     # answer = random.choice(words)
@@ -150,51 +183,22 @@ while playing:
     fullOutput = []
     additionalOutput = ""
     emojis = ""
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n---start---\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-
-    def coolPrint(thing):
-        for i in thing:
-            print(i, end="")
-            sleep(0.2)
-        print("")
-
-    def coolerPrint(out):
-        insertSpace()
-        fullOutput.append(out)
-        for item in fullOutput:
-            print(item)
-
-    def insertSpace():
-        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-
-    def update(out):
-        # fullOutput[-1:] = out
-        for item in fullOutput:
-            insertSpace()
-            print(item)
-            sleep(0.2)
+    insertSpace()
 
     for guessNum in range(guessAmount):
         guess = input("Guess #" + str(guessNum + 1) + ": ").strip()
         outList = []
         output = ""
-        # latest = ""
         if len(guess) == letterAmount and guess in words:
             for i in range(letterAmount):
                 if guess[i] == answer[i]:
-                    # output += colored(guess[i], "green")
                     outList.append("#")
-                    # latest = colored(guess[i], "green")
                     emojis += "🟩"
                 elif guess[i] in answer:
-                    # output += colored(guess[i], "yellow")
-                    # latest = colored(guess[i], "yellow")
                     emojis += "🟨"
                     outList.append("-")
                 else:
-                    # output += guess[i]
                     outList.append("-")
-                    # latest = colored(guess[i], "white")
                     emojis += "⬛️"
             outList2 = []
             for symbol, letter in zip(outList, guess):
@@ -255,14 +259,12 @@ while playing:
 
                 insertSpace()
                 print(output)
-                # sleep(0.3)
                 if delay == "auto":
                     sleep(1.5 / letterAmount)
                 elif delay == 0:
                     pass
                 else:
                     sleep(int(delay) / 1000)
-            # update(output)
             insertSpace()
             coolerPrint(output)
             if extraInfo == True:
